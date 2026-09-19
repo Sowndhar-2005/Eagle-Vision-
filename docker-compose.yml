@@ -1,0 +1,82 @@
+# =============================================
+# Eagle Vision — Docker Compose (Development)
+# =============================================
+
+services:
+  # ===== PostgreSQL + pgvector =====
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: eagle-vision-db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===== Redis =====
+  redis:
+    image: redis:7-alpine
+    container_name: eagle-vision-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===== FastAPI Backend =====
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: eagle-vision-backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # ===== React Frontend =====
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: eagle-vision-frontend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    command: npm run dev -- --host
+
+volumes:
+  pgdata:
+    driver: local
+  redis_data:
+    driver: local

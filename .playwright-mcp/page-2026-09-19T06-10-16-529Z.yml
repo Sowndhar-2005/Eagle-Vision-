@@ -1,0 +1,76 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]: EAGLE VISIONAI Platform
+    - generic [ref=e10]:
+      - button [ref=e11] [cursor=pointer]
+      - generic [ref=e16]:
+        - generic [ref=e17]: JD
+        - generic [ref=e18]:
+          - generic [ref=e19]: Jane Doe
+          - generic [ref=e20]: Senior Engineer
+  - generic [ref=e21]:
+    - complementary [ref=e22]:
+      - navigation [ref=e23]:
+        - link "Dashboard" [ref=e24] [cursor=pointer]:
+          - /url: /
+        - link "Skills Graph" [ref=e31] [cursor=pointer]:
+          - /url: /skills
+        - link "Opportunities" [ref=e38] [cursor=pointer]:
+          - /url: /opportunities
+        - link "Learning Paths" [ref=e43] [cursor=pointer]:
+          - /url: /learning
+        - link "My Profile" [ref=e48] [cursor=pointer]:
+          - /url: /profile
+      - generic [ref=e54]:
+        - paragraph [ref=e55]: AI Mobility Active
+        - paragraph [ref=e56]: Semantic embeddings and graph matching powered by Gemini 2.5 Flash.
+    - main [ref=e57]:
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - heading "Talent Mobility Dashboard" [level=1] [ref=e60]
+          - paragraph [ref=e61]: Discover internal growth paths, high-match opportunities, and transferable skill insights.
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]: Role Fit Match
+            - generic [ref=e70]: 92%
+            - generic [ref=e71]: +4% this month
+          - generic [ref=e72]:
+            - generic [ref=e73]: Transferable Skills
+            - generic [ref=e77]: 8 Detected
+            - generic [ref=e78]: AI Knowledge Graph
+          - generic [ref=e79]:
+            - generic [ref=e80]: Open Opportunities
+            - generic [ref=e85]: 24 Roles / Gigs
+            - generic [ref=e86]: 6 High Match
+          - generic [ref=e87]:
+            - generic [ref=e88]: Active Upskilling
+            - generic [ref=e93]: 2 Roadmaps
+            - generic [ref=e94]: 65% completed
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - heading "Recommended Opportunities for You" [level=2] [ref=e97]
+            - generic [ref=e98] [cursor=pointer]: View all
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - generic [ref=e104]:
+                  - generic [ref=e105]: Lead AI Application Engineer
+                  - generic [ref=e106]: 94% Match
+                - generic [ref=e107]: AI Labs & Innovation • Full-time Role
+                - generic [ref=e108]:
+                  - generic [ref=e109]: FastAPI
+                  - generic [ref=e110]: Gemini GenAI
+                  - generic [ref=e111]: Vector Search
+                  - generic [ref=e112]: pgvector
+              - button "Explore Fit" [ref=e113] [cursor=pointer]
+            - generic [ref=e114]:
+              - generic [ref=e115]:
+                - generic [ref=e116]:
+                  - generic [ref=e117]: "Cross-Functional Gig: Internal Talent Matching ML"
+                  - generic [ref=e118]: 89% Match
+                - generic [ref=e119]: People Analytics • 20% Gig Project (8 weeks)
+                - generic [ref=e120]:
+                  - generic [ref=e121]: Python
+                  - generic [ref=e122]: NetworkX
+                  - generic [ref=e123]: Algorithmic Matching
+              - button "Explore Fit" [ref=e124] [cursor=pointer]

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eagle-vision-backend
+  labels:
+    app: eagle-vision
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: eagle-vision
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: eagle-vision
+        tier: backend
+    spec:
+      containers:
+      - name: backend
+        image: eagle-vision-backend:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: eagle-vision-config
+        - secretRef:
+            name: eagle-vision-secrets
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eagle-vision-backend-service
+spec:
+  selector:
+    app: eagle-vision
+    tier: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
