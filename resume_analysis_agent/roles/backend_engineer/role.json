@@ -1,0 +1,40 @@
+{
+  "name": "backend_engineer",
+  "position_title": "Backend Software Engineer",
+  "categories": [
+    {
+      "key": "system_design_architecture",
+      "label": "System Design & Architecture",
+      "max": 30,
+      "description": "Distributed systems patterns, microservices vs monolith trade-offs, caching (Redis/Memcached), message queues (Kafka/RabbitMQ), and concurrency/async programming.",
+      "icon": "🏛️"
+    },
+    {
+      "key": "api_database_engineering",
+      "label": "API & Database Engineering",
+      "max": 30,
+      "description": "High-throughput REST/gRPC API development, SQL/NoSQL schema design, query optimization, indexing strategies, transactions, and ORM proficiency.",
+      "icon": "🗄️"
+    },
+    {
+      "key": "cloud_devops_reliability",
+      "label": "Cloud, DevOps & Reliability",
+      "max": 20,
+      "description": "Containerization (Docker), orchestration (Kubernetes), CI/CD pipelines, cloud infrastructure (AWS/GCP/Azure), logging, and APM observability.",
+      "icon": "☁️"
+    },
+    {
+      "key": "code_quality_testing",
+      "label": "Code Quality & Testing",
+      "max": 20,
+      "description": "Unit/integration testing suites (pytest, jest), clean architecture, documentation, security best practices, and code review standards.",
+      "icon": "✅"
+    }
+  ],
+  "bonus_max": 10,
+  "bonus_criteria": "Demonstrated experience scaling systems to >10,000 QPS, cloud architecture certifications, or authoring foundational libraries.",
+  "deductions_criteria": "Zero evidence of automated testing, lack of version control, or absence of database design experience.",
+  "min_final_score": 0,
+  "max_final_score": 110,
+  "passing_cutoff": 65
+}

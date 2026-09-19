@@ -1,0 +1,40 @@
+{
+  "name": "software_engineering_intern",
+  "position_title": "Software Engineering Intern",
+  "categories": [
+    {
+      "key": "technical_skills",
+      "label": "Core Technical Skills",
+      "max": 30,
+      "description": "Proficiency in at least one modern language (Python, TypeScript, Java, C++, Go), Git version control, and data structures/algorithms fundamentals.",
+      "icon": "💻"
+    },
+    {
+      "key": "self_projects",
+      "label": "Independent Projects",
+      "max": 25,
+      "description": "Demonstrated initiative through self-built, non-trivial applications. Look for complexity, architecture, database usage, and original implementation over tutorial copies.",
+      "icon": "🚀"
+    },
+    {
+      "key": "production_experience",
+      "label": "Production & Practical Experience",
+      "max": 25,
+      "description": "Prior software internships, research lab work, freelance delivery, or hackathon wins showing collaboration, code reviews, and testing.",
+      "icon": "🏢"
+    },
+    {
+      "key": "open_source_contributions",
+      "label": "Open Source & GitHub Signals",
+      "max": 20,
+      "description": "Public repositories, clear commit histories, documentation, code readability, or contributions to third-party open source projects.",
+      "icon": "🌐"
+    }
+  ],
+  "bonus_max": 10,
+  "bonus_criteria": "Deployed application with active real-world users, notable open source maintainership (>50 GitHub stars), or published technical write-ups.",
+  "deductions_criteria": "Resume includes buzzword stuffing without substance, dead links, or completely unverified claims.",
+  "min_final_score": 0,
+  "max_final_score": 110,
+  "passing_cutoff": 60
+}

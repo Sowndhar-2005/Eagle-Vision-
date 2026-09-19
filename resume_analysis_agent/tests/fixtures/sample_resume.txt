@@ -1,0 +1,39 @@
+# Maya Lin
+Email: maya.lin@example.edu | Phone: (555) 987-6543
+GitHub: https://github.com/octocat | LinkedIn: https://linkedin.com/in/mayalin-dev
+
+## Summary
+Passionate third-year Computer Science undergraduate seeking a Software Engineering Internship.
+Experienced in Python, TypeScript, FastAPI, React, and building cloud-native microservices.
+Active open source contributor and hackathon participant.
+
+## Technical Skills
+- Languages: Python, TypeScript, JavaScript, SQL, C++
+- Frameworks & Libraries: FastAPI, React, Node.js, PyTorch
+- Databases: PostgreSQL, Redis, SQLite
+- Developer Tools: Git, Docker, GitHub Actions, Linux
+
+## Work Experience
+### Undergraduate Teaching Assistant | Dept. of Computer Science
+January 2024 – Present | Boston, MA
+- Mentored 80+ students in Data Structures & Algorithms course (Python and C++).
+- Automated lab grading scripts, reducing instructor grading workload by 50%.
+
+### Software Development Intern | HealthTech Solutions
+June 2023 – August 2023 | Remote
+- Built patient scheduling REST API endpoints using FastAPI and PostgreSQL with 100% test coverage.
+- Optimized query latency by 45% through composite database indexing and connection pooling.
+
+## Key Projects
+### Realtime Collaborative Whiteboard (React, WebSockets, Redis)
+- Built a multi-user digital whiteboard supporting live cursor tracking and document sync.
+- Handled 500 simultaneous socket connections with Redis pub/sub backplane.
+- GitHub: https://github.com/octocat/collab-board
+
+### Resume Keyword Analyzer (Python, FastAPI)
+- Developed an open source tool calculating semantic similarity between resumes and job descriptions.
+- GitHub: https://github.com/octocat/resume-analyzer
+
+## Education
+B.S. in Computer Science | Massachusetts Institute of Technology (Expected May 2026)
+GPA: 3.9/4.0
