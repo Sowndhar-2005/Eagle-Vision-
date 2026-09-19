@@ -79,6 +79,9 @@ class AnalyzeRequirementRequest(BaseModel):
     department: Optional[str] = None
     duration_months: Optional[int] = None
     headcount: Optional[int] = 1
+    provider: Optional[str] = None  # "gemini", "claude", "openai", "groq", "deepseek", "ollama", "deterministic"
+    api_key: Optional[str] = None
+    model: Optional[str] = None
 
 
 class RequiredSkillSchema(BaseModel):

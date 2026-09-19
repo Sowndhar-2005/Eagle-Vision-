@@ -90,12 +90,34 @@ class Settings(BaseSettings):
     def REFRESH_TOKEN_EXPIRE_DAYS(self) -> int:
         return self.JWT_REFRESH_TOKEN_EXPIRE_DAYS
 
-    # AI / LLM
-    LLM_PROVIDER: str = "deterministic"  # "gemini", "openai", "deterministic"
+    # AI / LLM Multi-Provider Settings
+    LLM_PROVIDER: str = "deterministic"  # "gemini", "claude", "openai", "groq", "deepseek", "ollama", "deterministic"
+    
+    # Gemini
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-2.5-flash"
+    
+    # Anthropic / Claude
+    ANTHROPIC_API_KEY: str = ""
+    CLAUDE_API_KEY: str = ""
+    CLAUDE_MODEL: str = "claude-3-5-sonnet-20241022"
+
+    # OpenAI
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
+    OPENAI_BASE_URL: Optional[str] = None
+
+    # Groq (Ultra-fast Llama 3)
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+
+    # DeepSeek
+    DEEPSEEK_API_KEY: str = ""
+    DEEPSEEK_MODEL: str = "deepseek-chat"
+
+    # Ollama (Local)
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3"
 
     # Embeddings
     EMBEDDING_PROVIDER: str = "fallback"  # "sentence_transformers" or "fallback"

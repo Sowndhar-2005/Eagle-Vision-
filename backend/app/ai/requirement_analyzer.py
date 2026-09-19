@@ -107,12 +107,16 @@ class RequirementAnalyzer:
         department: str = "",
         duration_months: Optional[int] = None,
         headcount: int = 1,
+        provider_name: Optional[str] = None,
+        api_key: Optional[str] = None,
+        model: Optional[str] = None,
     ) -> StructuredRequirement:
         """
         Analyze a natural-language project requirement and return a StructuredRequirement.
-
-        Raises ValueError if the AI output cannot be parsed or validated.
+        Supports dynamic provider, API key, and model overrides.
         """
+        llm = get_llm_provider(provider_name=provider_name, api_key=api_key, model=model)
+
         user_message = json.dumps({
             "project_name": project_name,
             "description": description,
@@ -121,7 +125,13 @@ class RequirementAnalyzer:
             "headcount": headcount,
         })
 
-        raw = self._llm.generate(self._system_prompt, user_message)
+        try:
+            raw = llm.generate(self._system_prompt, user_message)
+        except Exception as e:
+            # On any provider exception (API key missing, quota exceeded, network), fall back gracefully
+            from app.ai.llm_provider import DeterministicLocalProvider
+            fallback = DeterministicLocalProvider()
+            raw = fallback.generate(self._system_prompt, user_message)
 
         # Parse JSON
         try:

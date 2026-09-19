@@ -62,19 +62,59 @@ class LLMProvider(ABC):
 
 
 class GeminiProvider(LLMProvider):
-    """Google Gemini LLM provider using google-genai SDK."""
+    """Google Gemini LLM provider (supports google-genai SDK or direct REST API)."""
 
-    def __init__(self):
-        if not settings.GEMINI_API_KEY:
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        self._api_key = api_key or settings.GEMINI_API_KEY
+        self._model = model or settings.GEMINI_MODEL or "gemini-2.5-flash"
+        if not self._api_key:
             raise ValueError("GEMINI_API_KEY is not configured")
+
+    def generate(
+        self,
+        system_prompt: str,
+        user_message: str,
+        response_schema: Optional[Any] = None,
+    ) -> str:
+        # Try google-genai SDK first
         try:
             from google import genai
             from google.genai import types as genai_types
-            self._client = genai.Client(api_key=settings.GEMINI_API_KEY)
-            self._model = settings.GEMINI_MODEL
-            self._types = genai_types
-        except ImportError:
-            raise ImportError("google-genai package is required for GeminiProvider")
+            client = genai.Client(api_key=self._api_key)
+            config_args: Dict[str, Any] = {"system_instruction": system_prompt}
+            if response_schema:
+                config_args["response_mime_type"] = "application/json"
+            response = client.models.generate_content(
+                model=self._model,
+                contents=user_message,
+                config=genai_types.GenerateContentConfig(**config_args),
+            )
+            return response.text or ""
+        except Exception:
+            # Fallback to direct Gemini REST API via httpx
+            import httpx
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{self._model}:generateContent?key={self._api_key}"
+            payload = {
+                "system_instruction": {"parts": [{"text": system_prompt}]},
+                "contents": [{"parts": [{"text": user_message}]}],
+            }
+            if response_schema:
+                payload["generationConfig"] = {"response_mime_type": "application/json"}
+            resp = httpx.post(url, json=payload, timeout=30.0)
+            if resp.status_code != 200:
+                raise RuntimeError(f"Gemini API Error {resp.status_code}: {resp.text}")
+            data = resp.json()
+            return data["candidates"][0]["content"]["parts"][0]["text"]
+
+
+class ClaudeProvider(LLMProvider):
+    """Anthropic Claude LLM provider via official REST API."""
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        self._api_key = api_key or settings.ANTHROPIC_API_KEY or settings.CLAUDE_API_KEY
+        self._model = model or settings.CLAUDE_MODEL or "claude-3-5-sonnet-20241022"
+        if not self._api_key:
+            raise ValueError("ANTHROPIC_API_KEY / CLAUDE_API_KEY is not configured")
 
     def generate(
         self,
@@ -82,32 +122,39 @@ class GeminiProvider(LLMProvider):
         user_message: str,
         response_schema: Optional[Any] = None,
     ) -> str:
-        config_args: Dict[str, Any] = {
-            "system_instruction": system_prompt,
+        import httpx
+        url = "https://api.anthropic.com/v1/messages"
+        headers = {
+            "x-api-key": self._api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
         }
+        prompt_with_instructions = user_message
         if response_schema:
-            config_args["response_mime_type"] = "application/json"
+            prompt_with_instructions += "\n\nCRITICAL: You MUST respond ONLY with valid JSON matching the requested schema. Do not enclose in markdown blocks unless needed."
 
-        response = self._client.models.generate_content(
-            model=self._model,
-            contents=user_message,
-            config=self._types.GenerateContentConfig(**config_args),
-        )
-        return response.text or ""
+        payload = {
+            "model": self._model,
+            "max_tokens": 4096,
+            "system": system_prompt,
+            "messages": [{"role": "user", "content": prompt_with_instructions}],
+        }
+        resp = httpx.post(url, headers=headers, json=payload, timeout=35.0)
+        if resp.status_code != 200:
+            raise RuntimeError(f"Claude API Error {resp.status_code}: {resp.text}")
+        data = resp.json()
+        return data["content"][0]["text"]
 
 
 class OpenAIProvider(LLMProvider):
-    """OpenAI LLM provider."""
+    """OpenAI LLM provider (supports GPT-4o, GPT-4o-mini, etc.)."""
 
-    def __init__(self):
-        if not settings.OPENAI_API_KEY:
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None, base_url: Optional[str] = None):
+        self._api_key = api_key or settings.OPENAI_API_KEY
+        self._model = model or settings.OPENAI_MODEL or "gpt-4o-mini"
+        self._base_url = base_url or settings.OPENAI_BASE_URL or "https://api.openai.com/v1"
+        if not self._api_key:
             raise ValueError("OPENAI_API_KEY is not configured")
-        try:
-            import openai
-            self._client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
-            self._model = settings.OPENAI_MODEL
-        except ImportError:
-            raise ImportError("openai package is required for OpenAIProvider")
 
     def generate(
         self,
@@ -115,16 +162,139 @@ class OpenAIProvider(LLMProvider):
         user_message: str,
         response_schema: Optional[Any] = None,
     ) -> str:
+        import httpx
+        url = f"{self._base_url.rstrip('/')}/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self._api_key}",
+            "Content-Type": "application/json",
+        }
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
         ]
-        kwargs: Dict[str, Any] = {"model": self._model, "messages": messages}
+        payload: Dict[str, Any] = {
+            "model": self._model,
+            "messages": messages,
+        }
         if response_schema:
-            kwargs["response_format"] = {"type": "json_object"}
+            payload["response_format"] = {"type": "json_object"}
 
-        response = self._client.chat.completions.create(**kwargs)
-        return response.choices[0].message.content or ""
+        resp = httpx.post(url, headers=headers, json=payload, timeout=30.0)
+        if resp.status_code != 200:
+            raise RuntimeError(f"OpenAI API Error {resp.status_code}: {resp.text}")
+        data = resp.json()
+        return data["choices"][0]["message"]["content"] or ""
+
+
+class GroqProvider(LLMProvider):
+    """Groq ultra-fast Llama 3 / Mixtral provider."""
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        self._api_key = api_key or settings.GROQ_API_KEY
+        self._model = model or settings.GROQ_MODEL or "llama-3.3-70b-versatile"
+        if not self._api_key:
+            raise ValueError("GROQ_API_KEY is not configured")
+
+    def generate(
+        self,
+        system_prompt: str,
+        user_message: str,
+        response_schema: Optional[Any] = None,
+    ) -> str:
+        import httpx
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self._api_key}",
+            "Content-Type": "application/json",
+        }
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message},
+        ]
+        payload: Dict[str, Any] = {
+            "model": self._model,
+            "messages": messages,
+        }
+        if response_schema:
+            payload["response_format"] = {"type": "json_object"}
+
+        resp = httpx.post(url, headers=headers, json=payload, timeout=25.0)
+        if resp.status_code != 200:
+            raise RuntimeError(f"Groq API Error {resp.status_code}: {resp.text}")
+        data = resp.json()
+        return data["choices"][0]["message"]["content"] or ""
+
+
+class DeepSeekProvider(LLMProvider):
+    """DeepSeek LLM provider (V3 / R1)."""
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        self._api_key = api_key or settings.DEEPSEEK_API_KEY
+        self._model = model or settings.DEEPSEEK_MODEL or "deepseek-chat"
+        if not self._api_key:
+            raise ValueError("DEEPSEEK_API_KEY is not configured")
+
+    def generate(
+        self,
+        system_prompt: str,
+        user_message: str,
+        response_schema: Optional[Any] = None,
+    ) -> str:
+        import httpx
+        url = "https://api.deepseek.com/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self._api_key}",
+            "Content-Type": "application/json",
+        }
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message},
+        ]
+        payload: Dict[str, Any] = {
+            "model": self._model,
+            "messages": messages,
+        }
+        if response_schema:
+            payload["response_format"] = {"type": "json_object"}
+
+        resp = httpx.post(url, headers=headers, json=payload, timeout=30.0)
+        if resp.status_code != 200:
+            raise RuntimeError(f"DeepSeek API Error {resp.status_code}: {resp.text}")
+        data = resp.json()
+        return data["choices"][0]["message"]["content"] or ""
+
+
+class OllamaProvider(LLMProvider):
+    """Ollama local open-source LLM provider."""
+
+    def __init__(self, base_url: Optional[str] = None, model: Optional[str] = None):
+        self._base_url = (base_url or settings.OLLAMA_BASE_URL or "http://localhost:11434").rstrip("/")
+        self._model = model or settings.OLLAMA_MODEL or "llama3"
+
+    def generate(
+        self,
+        system_prompt: str,
+        user_message: str,
+        response_schema: Optional[Any] = None,
+    ) -> str:
+        import httpx
+        url = f"{self._base_url}/api/chat"
+        payload = {
+            "model": self._model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message},
+            ],
+            "stream": False,
+        }
+        if response_schema:
+            payload["format"] = "json"
+
+        resp = httpx.post(url, json=payload, timeout=60.0)
+        if resp.status_code != 200:
+            raise RuntimeError(f"Ollama API Error {resp.status_code}: {resp.text}")
+        data = resp.json()
+        return data["message"]["content"]
 
 
 class DeterministicLocalProvider(LLMProvider):
@@ -460,22 +630,69 @@ class DeterministicLocalProvider(LLMProvider):
         return json.dumps(result)
 
 
-def get_llm_provider() -> LLMProvider:
-    """Factory: returns the configured LLM provider with fallback chain."""
-    provider_name = settings.LLM_PROVIDER.lower()
+def get_llm_provider(
+    provider_name: Optional[str] = None,
+    api_key: Optional[str] = None,
+    model: Optional[str] = None,
+    base_url: Optional[str] = None,
+) -> LLMProvider:
+    """
+    Factory: returns the requested or configured LLM provider with fallback chain.
+    Supports dynamic runtime overrides from UI or backend settings.
+    """
+    selected = (provider_name or settings.LLM_PROVIDER or "deterministic").lower().strip()
 
-    if provider_name == "gemini" and settings.GEMINI_API_KEY:
+    # 1. Google Gemini
+    if selected == "gemini":
+        key = api_key or settings.GEMINI_API_KEY
+        if key:
+            try:
+                return GeminiProvider(api_key=key, model=model or settings.GEMINI_MODEL)
+            except Exception as e:
+                print(f"[LLM] Gemini initialization failed: {e}. Falling back.")
+
+    # 2. Anthropic Claude
+    if selected in ("claude", "anthropic"):
+        key = api_key or settings.ANTHROPIC_API_KEY or settings.CLAUDE_API_KEY
+        if key:
+            try:
+                return ClaudeProvider(api_key=key, model=model or settings.CLAUDE_MODEL)
+            except Exception as e:
+                print(f"[LLM] Claude initialization failed: {e}. Falling back.")
+
+    # 3. OpenAI
+    if selected == "openai":
+        key = api_key or settings.OPENAI_API_KEY
+        if key:
+            try:
+                return OpenAIProvider(api_key=key, model=model or settings.OPENAI_MODEL, base_url=base_url)
+            except Exception as e:
+                print(f"[LLM] OpenAI initialization failed: {e}. Falling back.")
+
+    # 4. Groq
+    if selected == "groq":
+        key = api_key or settings.GROQ_API_KEY
+        if key:
+            try:
+                return GroqProvider(api_key=key, model=model or settings.GROQ_MODEL)
+            except Exception as e:
+                print(f"[LLM] Groq initialization failed: {e}. Falling back.")
+
+    # 5. DeepSeek
+    if selected == "deepseek":
+        key = api_key or settings.DEEPSEEK_API_KEY
+        if key:
+            try:
+                return DeepSeekProvider(api_key=key, model=model or settings.DEEPSEEK_MODEL)
+            except Exception as e:
+                print(f"[LLM] DeepSeek initialization failed: {e}. Falling back.")
+
+    # 6. Ollama
+    if selected == "ollama":
         try:
-            return GeminiProvider()
+            return OllamaProvider(base_url=base_url or settings.OLLAMA_BASE_URL, model=model or settings.OLLAMA_MODEL)
         except Exception as e:
-            print(f"[LLM] Gemini initialization failed: {e}. Falling back.")
+            print(f"[LLM] Ollama initialization failed: {e}. Falling back.")
 
-    if provider_name == "openai" and settings.OPENAI_API_KEY:
-        try:
-            return OpenAIProvider()
-        except Exception as e:
-            print(f"[LLM] OpenAI initialization failed: {e}. Falling back.")
-
-    # Always available fallback
-    print("[LLM] Using DeterministicLocalProvider (no external API configured)")
+    # Fallback: Deterministic local rules
     return DeterministicLocalProvider()

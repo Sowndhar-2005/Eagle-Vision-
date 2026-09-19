@@ -4,7 +4,10 @@ Eagle Vision — Integration Tests for HR Module
 
 import pytest
 from httpx import AsyncClient, ASGITransport
-from backend.app.main import app
+try:
+    from app.main import app
+except ImportError:
+    from backend.app.main import app
 
 
 @pytest.mark.asyncio

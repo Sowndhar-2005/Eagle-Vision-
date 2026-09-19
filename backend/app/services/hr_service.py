@@ -253,13 +253,16 @@ class HRService:
         if not project:
             raise ValueError(f"Project {project_id} not found")
 
-        # Run AI analysis
+        # Run AI analysis with optional provider override
         structured: StructuredRequirement = self._analyzer.analyze(
             project_name=req.project_name or project.name,
             description=req.raw_description,
             department=req.department or project.department,
             duration_months=req.duration_months or project.duration_months,
             headcount=req.headcount or project.headcount,
+            provider_name=req.provider,
+            api_key=req.api_key,
+            model=req.model,
         )
 
         # Generate embedding text and embedding
