@@ -27,6 +27,12 @@ class Employee(Base):
     open_to_remote: Mapped[bool] = mapped_column(Boolean, default=True)
     open_to_gigs: Mapped[bool] = mapped_column(Boolean, default=True)
     open_to_roles: Mapped[bool] = mapped_column(Boolean, default=True)
+    team_id: Mapped[Optional[str]] = mapped_column(String(36), nullable=True, index=True)
+    persona: Mapped[str] = mapped_column(String(50), default="growth_employee", nullable=False)
+    professional_summary: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    avatar: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    joining_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    project_history_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     # profile_embedding stored as JSON (list of floats) in SQLite mode
     profile_embedding_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -34,7 +40,7 @@ class Employee(Base):
     )
 
     user: Mapped[Optional["User"]] = relationship("User", back_populates="employee")
-    skills: Mapped[List["EmployeeSkill"]] = relationship("EmployeeSkill", back_populates="employee", lazy="joined")
+    skills: Mapped[List["EmployeeSkill"]] = relationship("EmployeeSkill", back_populates="employee")
     experiences: Mapped[List["WorkExperience"]] = relationship("WorkExperience", back_populates="employee")
     educations: Mapped[List["Education"]] = relationship("Education", back_populates="employee")
 
@@ -53,6 +59,8 @@ class EmployeeSkill(Base):
     years_of_experience: Mapped[float] = mapped_column(Float, default=0.0)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     is_hidden_transferable: Mapped[bool] = mapped_column(Boolean, default=False)
+    evidence: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    evidence_source: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
     employee: Mapped["Employee"] = relationship("Employee", back_populates="skills")
     skill: Mapped["Skill"] = relationship("Skill", back_populates="employee_skills")

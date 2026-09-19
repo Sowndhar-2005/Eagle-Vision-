@@ -1,33 +1,38 @@
 """
-Eagle Vision — Learning & Development Endpoints
+Eagle Vision — Learning & Upskilling Endpoints
 """
 
-from typing import Optional
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.api.deps import get_current_user
+from app.models.user import User
+from app.services.portal_service import (
+    list_courses, enroll_course, employee_for_user,
+)
 
 router = APIRouter()
 
 
-@router.get("/paths/{employee_id}", summary="Get Learning Paths for Employee")
-async def get_learning_paths(employee_id: str, db: AsyncSession = Depends(get_db)):
-    """Retrieve personalized AI-recommended learning paths based on career goals and skill gaps."""
-    return {"employee_id": employee_id, "paths": []}
+@router.get("/courses", summary="Catalog of learning resources")
+async def courses(user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    emp = await employee_for_user(db, user)
+    if not emp:
+        return {"items": []}
+    return {"items": await list_courses(db, emp.id)}
 
 
-@router.post("/paths/generate", summary="Generate AI Learning Path")
-async def generate_learning_path(payload: dict):
-    """Dynamically generate a step-by-step upskilling roadmap for a target role or project."""
-    return {"status": "generated", "path": {}}
-
-
-@router.get("/courses", summary="Search Learning Resources")
-async def search_courses(
-    skill_id: Optional[str] = None,
-    query: Optional[str] = None,
+@router.post("/courses/{resource_id}/enroll", summary="Enroll in a course")
+async def enroll(
+    resource_id: str,
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Search internal and external learning content."""
-    return {"courses": []}
+    emp = await employee_for_user(db, user)
+    if not emp:
+        raise HTTPException(status_code=400, detail="No employee profile linked")
+    result = await enroll_course(db, emp.id, resource_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Course not found")
+    return {"status": "enrolled" if result != "already" else "already_enrolled"}

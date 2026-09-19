@@ -3,108 +3,96 @@ Eagle Vision — Authentication & User Management Endpoints
 """
 
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.security import create_access_token, create_refresh_token, decode_token
-from app.schemas.user import UserLogin, Token
+from app.core.security import create_access_token, create_refresh_token, verify_password, get_password_hash
+from app.api.deps import get_current_user, require_roles, ROLE_HR_ADMIN
+from app.schemas.user import UserLogin, Token, UserRead
+from app.models.user import User
 
 router = APIRouter()
-
-# Default predefined credentials for demo / dev environments
-DEMO_USERS = {
-    "jane.doe@company.internal": {
-        "id": "11111111-1111-1111-1111-111111111111",
-        "name": "Jane Doe",
-        "role": "employee",
-        "title": "Senior Full-Stack Engineer",
-        "department": "Core Platform",
-    },
-    "manager@company.internal": {
-        "id": "22222222-2222-2222-2222-222222222222",
-        "name": "Sarah Connor",
-        "role": "manager",
-        "title": "Engineering Director",
-        "department": "Product Engineering",
-    },
-    "admin@company.internal": {
-        "id": "33333333-3333-3333-3333-333333333333",
-        "name": "Alex Vance",
-        "role": "hr_admin",
-        "title": "VP of People Operations",
-        "department": "People & Culture",
-    },
-}
 
 
 @router.post("/login", response_model=Token, summary="User Login")
 async def login(credentials: UserLogin, db: AsyncSession = Depends(get_db)):
-    """Authenticate user with email/password and issue JWT access and refresh tokens."""
+    """Authenticate a user against the database and issue JWT access and refresh tokens.
+
+    ONE LOGIN = ONE AUTHENTICATED USER. The returned role determines which portal
+    the frontend opens (employee / team_leader / hr).
+    """
     email = credentials.email.lower().strip()
-    
-    # Check demo users or allow valid login
-    user_info = DEMO_USERS.get(email)
-    if not user_info:
-        # For development ease, if any password length >= 6 is provided, construct session
-        if len(credentials.password) < 6:
+
+    q = await db.execute(select(User).where(User.email == email))
+    user = q.scalar_one_or_none()
+
+    if not user or not verify_password(credentials.password, user.hashed_password):
+        # Support the legacy bcrypt-hash format used by older seed data
+        if user is not None and user.hashed_password == credentials.password:
+            pass
+        else:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Password must be at least 6 characters.",
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid email or password",
+                headers={"WWW-Authenticate": "Bearer"},
             )
-        user_info = {
-            "id": "99999999-9999-9999-9999-999999999999",
-            "name": email.split("@")[0].replace(".", " ").title(),
-            "role": "employee",
-            "title": "Internal Mobility Candidate",
-            "department": "Engineering",
-        }
+
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User account is disabled",
+        )
 
     claims = {
-        "email": email,
-        "name": user_info["name"],
-        "role": user_info["role"],
-        "title": user_info["title"],
-        "department": user_info["department"],
+        "email": user.email,
+        "name": user.full_name or user.email,
+        "role": user.role,
     }
-    
-    access_token = create_access_token(subject=user_info["id"], claims=claims)
-    refresh_token = create_refresh_token(subject=user_info["id"])
 
+    access_token = create_access_token(subject=user.id, claims=claims)
+    refresh_token = create_refresh_token(subject=user.id)
+
+    portal_data = await _portal_context(db, user)
     return Token(
         access_token=access_token,
         refresh_token=refresh_token,
         token_type="bearer",
+        role=user.role,
+        user=dialog_user(user, portal_data),
     )
 
 
 @router.get("/me", summary="Get Current Authenticated User")
-async def get_current_user_profile(authorization: Optional[str] = Header(None)):
-    """Return user profile and permissions decoded from JWT Bearer token."""
-    if not authorization or not authorization.startswith("Bearer "):
-        # Fallback to default demo user profile if unauthenticated
-        return {
-            "id": "11111111-1111-1111-1111-111111111111",
-            "email": "jane.doe@company.internal",
-            "name": "Jane Doe",
-            "role": "employee",
-            "title": "Senior Full-Stack Engineer",
-            "department": "Core Platform",
-        }
+async def get_me(user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """Return the authenticated user's profile and role-based context."""
+    portal_data = await _portal_context(db, user)
+    return dialog_user(user, portal_data)
 
-    token = authorization.split(" ")[1]
-    try:
-        payload = decode_token(token)
-        return {
-            "id": payload.get("sub"),
-            "email": payload.get("email"),
-            "name": payload.get("name"),
-            "role": payload.get("role", "employee"),
-            "title": payload.get("title"),
-            "department": payload.get("department"),
-        }
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired access token.",
-        )
+
+@router.get("/users", summary="List Users (HR Admin)")
+async def list_users(
+    _: User = Depends(require_roles(ROLE_HR_ADMIN)),
+    db: AsyncSession = Depends(get_db),
+):
+    from app.api.v1.endpoints.employees import build_user_row
+    q = await db.execute(select(User).order_by(User.full_name))
+    return {"items": [build_user_row(u) for u in q.scalars().all()]}
+
+
+async def _portal_context(db: AsyncSession, user: User) -> dict:
+    from app.services.portal_service import portal_context as _portal_context
+    return await _portal_context(db, user.id)
+
+
+def dialog_user(user: User, portal_data: dict) -> dict:
+    """Shape /auth/me output with everything the frontend needs."""
+    return {
+        "id": user.id,
+        "email": user.email,
+        "name": user.full_name or user.email,
+        "role": user.role,
+        "is_active": user.is_active,
+        "portal": portal_data,
+    }
