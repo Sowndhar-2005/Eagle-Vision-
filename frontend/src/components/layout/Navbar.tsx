@@ -10,8 +10,9 @@ import {
   LogOut,
   Mail,
   MapPin,
+  ShieldCheck,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export const Navbar: React.FC = () => {
   const {
@@ -69,7 +70,7 @@ export const Navbar: React.FC = () => {
               </span>
             </div>
             <span className="text-[11px] text-slate-400 flex items-center space-x-1">
-              <Building className="w-3 h-3 text-slate-500" />
+              <Building className="w-3 3 text-slate-500" />
               <span>{currentUser.teamName}</span>
             </span>
           </div>
@@ -101,6 +102,15 @@ export const Navbar: React.FC = () => {
 
       {/* Right Actions & User Profile */}
       <div className="flex items-center space-x-3">
+        {/* Quick Link to HR Talent Management Center */}
+        <Link
+          to="/hr/dashboard"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-xs font-semibold transition-colors shadow-sm"
+        >
+          <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+          <span className="hidden sm:inline">HR Studio</span>
+        </Link>
+
         {/* Notifications Popover */}
         <div className="relative" ref={notifRef}>
           <button

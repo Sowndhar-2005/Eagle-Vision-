@@ -9,6 +9,7 @@ from app.api.v1.endpoints import (
     analytics,
     auth,
     employees,
+    hr,
     learning,
     notifications,
     opportunities,
@@ -19,6 +20,7 @@ from app.api.v1.endpoints import (
 api_router = APIRouter()
 
 api_router.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+api_router.include_router(hr.router, prefix="/hr", tags=["HR Module"])
 api_router.include_router(employees.router, prefix="/employees", tags=["Employees"])
 api_router.include_router(skills.router, prefix="/skills", tags=["Skills & Graph"])
 api_router.include_router(opportunities.router, prefix="/opportunities", tags=["Opportunities"])

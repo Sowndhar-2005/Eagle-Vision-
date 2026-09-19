@@ -19,6 +19,8 @@ import {
   Layers,
   Bot,
   Building,
+  ShieldCheck,
+  ArrowUpRight,
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -73,7 +75,7 @@ export const Sidebar: React.FC = () => {
           </span>
         </div>
 
-        <nav className="space-y-1 overflow-y-auto max-h-[calc(100vh-14rem)] pr-1">
+        <nav className="space-y-1 overflow-y-auto max-h-[calc(100vh-18rem)] pr-1">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -102,6 +104,29 @@ export const Sidebar: React.FC = () => {
             </NavLink>
           ))}
         </nav>
+
+        {/* HR Hub Switcher Section */}
+        <div className="pt-3 border-t border-slate-800/80">
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 block mb-1.5">
+            HR & Organization
+          </span>
+          <NavLink
+            to="/hr/dashboard"
+            className={({ isActive }) =>
+              `flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition-all duration-200 ${
+                isActive
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                  : 'text-amber-400/90 hover:text-amber-300 hover:bg-amber-500/10'
+              }`
+            }
+          >
+            <div className="flex items-center space-x-2.5">
+              <ShieldCheck className="w-4 h-4 text-amber-400" />
+              <span>HR Talent Hub</span>
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400/70" />
+          </NavLink>
+        </div>
       </div>
 
       {/* Multi-Team context box */}
