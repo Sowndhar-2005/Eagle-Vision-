@@ -1,0 +1,40 @@
+{
+  "name": "ai_ml_engineer",
+  "position_title": "AI / Machine Learning Engineer",
+  "categories": [
+    {
+      "key": "llm_genai_rag",
+      "label": "LLMs, GenAI & RAG Systems",
+      "max": 30,
+      "description": "Experience fine-tuning or prompting foundation models (Gemini, Claude, GPT), vector databases (pgvector, Pinecone, Chroma), semantic embeddings, and agentic workflows.",
+      "icon": "🤖"
+    },
+    {
+      "key": "ml_frameworks_modeling",
+      "label": "ML Frameworks & Classical ML",
+      "max": 30,
+      "description": "PyTorch, TensorFlow, Scikit-learn, evaluation metrics, feature engineering, data preprocessing, and model validation.",
+      "icon": "🧠"
+    },
+    {
+      "key": "software_engineering_deployment",
+      "label": "Production ML Engineering",
+      "max": 20,
+      "description": "Packaging models as scalable REST APIs (FastAPI), Dockerizing inference services, GPU utilization, latency optimization, and streaming.",
+      "icon": "⚙️"
+    },
+    {
+      "key": "applied_projects_impact",
+      "label": "Applied AI Projects & Impact",
+      "max": 20,
+      "description": "End-to-end applications demonstrating business value or novel problem-solving over standard Kaggle dataset clones.",
+      "icon": "🎯"
+    }
+  ],
+  "bonus_max": 10,
+  "bonus_criteria": "Published peer-reviewed ML papers, author of popular open source AI tools, or Kaggle Grandmaster/Master tier.",
+  "deductions_criteria": "Claiming ML expertise with only simple Jupyter notebooks and no software engineering rigor.",
+  "min_final_score": 0,
+  "max_final_score": 110,
+  "passing_cutoff": 65
+}
