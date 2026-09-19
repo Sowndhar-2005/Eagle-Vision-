@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-09-19T05:30:00.000Z" agent="Eagle Vision" version="24.0.0" type="device">
+  <diagram name="API Design" id="api-design-1">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ===== TITLE ===== -->
+        <mxCell id="title" value="&lt;b&gt;EAGLE VISION — REST API Design&lt;/b&gt;&lt;br&gt;Base URL: /api/v1 · Format: JSON · Auth: JWT Bearer Token" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="460" y="15" width="600" height="45" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== AUTH GROUP ===== -->
+        <mxCell id="auth-group" value="🔐 /auth — Authentication" style="swimlane;startSize=28;fillColor=#fee2e2;strokeColor=#ef4444;fontStyle=1;fontSize=13;fontColor=#991b1b;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="80" width="280" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="a1" value="🔓 POST /register" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#1e293b;fontSize=11;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="auth-group">
+          <mxGeometry x="10" y="35" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="a2" value="🔓 POST /login" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#1e293b;fontSize=11;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="auth-group">
+          <mxGeometry x="10" y="66" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="a3" value="POST /refresh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#1e293b;fontSize=11;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="auth-group">
+          <mxGeometry x="10" y="97" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="a4" value="POST /logout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#1e293b;fontSize=11;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="auth-group">
+          <mxGeometry x="10" y="128" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="a5" value="GET /me" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#1e293b;fontSize=11;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="auth-group">
+          <mxGeometry x="10" y="159" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="a6" value="PUT /me/password" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#1e293b;fontSize=11;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="auth-group">
+          <mxGeometry x="10" y="190" width="260" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== EMPLOYEES GROUP ===== -->
+        <mxCell id="emp-group" value="👤 /employees — Employee Management" style="swimlane;startSize=28;fillColor=#dbeafe;strokeColor=#3b82f6;fontStyle=1;fontSize=13;fontColor=#1e40af;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="80" width="300" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="GET /                                        🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="35" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="GET /:id                        🔒 Self/TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="66" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="PUT /:id                           🔒 Self/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="97" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="POST /onboarding                    🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="128" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="GET /:id/skills              🔒 Self/TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="159" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="POST /:id/skills                      🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="190" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" value="PUT /:id/skills/:skillId             🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="221" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" value="DELETE /:id/skills/:skillId          🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="252" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" value="GET /search                        🔒 TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="emp-group">
+          <mxGeometry x="10" y="283" width="280" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== SKILLS GROUP ===== -->
+        <mxCell id="skill-group" value="🎯 /skills — Skill Catalog" style="swimlane;startSize=28;fillColor=#d1fae5;strokeColor=#10b981;fontStyle=1;fontSize=13;fontColor=#065f46;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="80" width="280" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1" value="GET /                                  🔒 All" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="skill-group">
+          <mxGeometry x="10" y="35" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="s2" value="GET /categories                      🔒 All" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="skill-group">
+          <mxGeometry x="10" y="66" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3" value="GET /:id                               🔒 All" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="skill-group">
+          <mxGeometry x="10" y="97" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="s4" value="POST /                                   🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="skill-group">
+          <mxGeometry x="10" y="128" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="s5" value="PUT /:id                                  🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="skill-group">
+          <mxGeometry x="10" y="159" width="260" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== OPPORTUNITIES GROUP ===== -->
+        <mxCell id="opp-group" value="🚀 /opportunities — Internal Mobility" style="swimlane;startSize=28;fillColor=#f3e8ff;strokeColor=#8b5cf6;fontStyle=1;fontSize=13;fontColor=#5b21b6;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="80" width="300" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="o1" value="GET /                                       🔒 All" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="35" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o2" value="GET /:id                                   🔒 All" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="66" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o3" value="POST /                                  🔒 TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="97" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o4" value="PUT /:id                          🔒 Creator/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="128" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o5" value="DELETE /:id                     🔒 Creator/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="159" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o6" value="POST /:id/apply                 🔒 Employee" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="190" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o7" value="GET /:id/applications       🔒 Creator/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="221" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o8" value="PUT /:id/applications/:appId 🔒 Creator/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#8b5cf6;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="252" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="o9" value="GET /:id/matches           🔒 Creator/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="opp-group">
+          <mxGeometry x="10" y="283" width="280" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== LEARNING GROUP ===== -->
+        <mxCell id="learn-group" value="📚 /learning — Development" style="swimlane;startSize=28;fillColor=#fef3c7;strokeColor=#f59e0b;fontStyle=1;fontSize=13;fontColor=#92400e;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="430" width="280" height="380" as="geometry"/>
+        </mxCell>
+        <mxCell id="l1" value="GET /courses                            🔒 All" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="35" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l2" value="GET /courses/:id                       🔒 All" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="66" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l3" value="POST /courses                           🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="97" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l4" value="POST /courses/:id/enroll     🔒 Employee" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#eab308;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="128" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l5" value="PUT /courses/:id/progress  🔒 Employee" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="159" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l6" value="GET /requests           🔒 Self/TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="195" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l7" value="POST /requests                🔒 Employee" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="226" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l8" value="PUT /requests/:id/review    🔒 TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#eab308;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="257" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l9" value="GET /paths                     🔒 Employee" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="293" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="l10" value="GET /paths/:id              🔒 Self/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="learn-group">
+          <mxGeometry x="10" y="324" width="260" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== AI GROUP ===== -->
+        <mxCell id="ai-group" value="🧠 /ai — AI Services" style="swimlane;startSize=28;fillColor=#fce7f3;strokeColor=#ec4899;fontStyle=1;fontSize=13;fontColor=#9d174d;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="430" width="300" height="380" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai1" value="POST /extract-skills        🔒 System/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#ec4899;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="35" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai2" value="GET /skill-profile/:empId 🔒 Self/TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="66" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai3" value="POST /skill-profile/:empId/generate 🔒 Self/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#ec4899;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="97" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai4" value="GET /skill-gaps/:empId  🔒 Self/TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="128" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai5" value="GET /match/:empId/opportunities 🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="159" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai6" value="POST /career-roadmap         🔒 Employee" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#ec4899;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="195" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai-chat-label" value="💬 AI Assistant Chat" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#9d174d;fontStyle=3;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="230" width="200" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai7" value="POST /assistant/sessions        🔒 Emp/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#ec4899;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="255" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai8" value="GET /assistant/sessions              🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#ec4899;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="286" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai9" value="GET /assistant/sessions/:id         🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#ec4899;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="317" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ai10" value="POST /assistant/sessions/:id/messages 🔒" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="ai-group">
+          <mxGeometry x="10" y="348" width="280" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== TALENT GROUP ===== -->
+        <mxCell id="talent-group" value="🔍 /talent — Talent Discovery" style="swimlane;startSize=28;fillColor=#ffedd5;strokeColor=#f97316;fontStyle=1;fontSize=13;fontColor=#9a3412;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="430" width="280" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="t1" value="POST /search                       🔒 TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="talent-group">
+          <mxGeometry x="10" y="35" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="t2" value="GET /shortlists                    🔒 TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="talent-group">
+          <mxGeometry x="10" y="66" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="t3" value="POST /shortlists                    🔒 TL/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="talent-group">
+          <mxGeometry x="10" y="97" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="t4" value="DELETE /shortlists/:id      🔒 Creator/HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="talent-group">
+          <mxGeometry x="10" y="128" width="260" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ANALYTICS GROUP ===== -->
+        <mxCell id="analytics-group" value="📊 /analytics — Workforce Intelligence" style="swimlane;startSize=28;fillColor=#cffafe;strokeColor=#06b6d4;fontStyle=1;fontSize=13;fontColor=#155e75;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="630" width="280" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="h1" value="GET /workforce-skills             🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#06b6d4;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;fontStyle=1;" vertex="1" parent="analytics-group">
+          <mxGeometry x="10" y="35" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="h2" value="GET /skill-distribution              🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#06b6d4;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="analytics-group">
+          <mxGeometry x="10" y="66" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3" value="GET /skill-gaps                        🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#06b6d4;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="analytics-group">
+          <mxGeometry x="10" y="97" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="h4" value="GET /departments/:id/skills 🔒 HR/TL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#06b6d4;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="analytics-group">
+          <mxGeometry x="10" y="128" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="h5" value="GET /mobility-report                🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#06b6d4;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="analytics-group">
+          <mxGeometry x="10" y="159" width="260" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="h6" value="GET /learning-progress             🔒 HR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#06b6d4;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="analytics-group">
+          <mxGeometry x="10" y="190" width="260" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== NOTIFICATIONS GROUP ===== -->
+        <mxCell id="notify-group" value="🔔 /notifications" style="swimlane;startSize=28;fillColor=#e2e8f0;strokeColor=#64748b;fontStyle=1;fontSize=13;fontColor=#334155;rounded=1;arcSize=8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="430" width="300" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="n1" value="GET /                                         🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="notify-group">
+          <mxGeometry x="10" y="35" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="n2" value="PUT /:id/read                               🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="notify-group">
+          <mxGeometry x="10" y="66" width="280" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="n3" value="PUT /read-all                                🔒 Self" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;fontColor=#1e293b;fontSize=10;arcSize=12;align=left;spacingLeft=10;" vertex="1" parent="notify-group">
+          <mxGeometry x="10" y="97" width="280" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== SUMMARY BOX ===== -->
+        <mxCell id="summary" value="&lt;b&gt;API Summary&lt;/b&gt;&lt;br&gt;9 Endpoint Groups · 50+ Endpoints&lt;br&gt;3 Roles: Employee · Team Leader · HR&lt;br&gt;JWT Bearer Auth · RBAC on every endpoint&lt;br&gt;Pagination · Rate Limiting · Versioned" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#334155;fontColor=#e2e8f0;fontSize=12;arcSize=10;shadow=1;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="950" y="610" width="300" height="100" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
