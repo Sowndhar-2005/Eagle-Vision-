@@ -2,38 +2,50 @@
 
 **AI-Powered Talent Discovery & Internal Mobility Platform**
 
-Eagle Vision is an enterprise intelligence system that analyzes workforce capabilities, identifies hidden and transferable skills, matches employees with internal roles and cross-functional gigs, detects institutional skill deficits, and dynamically orchestrates personalized career upskilling paths.
+📝 **[Project Documentation (Notion)](https://app.notion.com/p/EAGLE-VISION-3df6114dea7580a1ade9cf7b411904de?source=copy_link)**
 
 ---
 
-## 📑 Table of Contents
+## 🌍 The Problem
 
-- [Key Features](#-key-features)
-- [Tech Stack](#-tech-stack)
-- [Prerequisites](#-prerequisites)
-- [Quick Start: Running the Application](#-quick-start-running-the-application)
-  - [Option A: Local Development (Fastest)](#option-a-local-development-fastest)
-  - [Option B: Full-Stack Docker Compose](#option-b-full-stack-docker-compose)
-- [System Architecture](#-system-architecture)
-  - [Directory Structure](#directory-structure)
-  - [Talent Matching Algorithm](#talent-matching-algorithm)
-  - [Data Flow & Request Lifecycle](#data-flow--request-lifecycle)
-- [API Documentation](#-api-documentation)
-- [Environment Variables](#-environment-variables)
-- [Testing](#-testing)
-- [Deployment & Infrastructure](#-deployment--infrastructure)
-- [Troubleshooting](#-troubleshooting)
+Large enterprises struggle with a critical talent visibility gap — valuable employees remain invisible for internal opportunities because their transferable skills, cross-domain expertise, and career aspirations are buried across disconnected HR systems, performance reviews, and résumés. This leads to preventable attrition, expensive external hiring for roles that existing employees could fill, and widening organizational skill deficits that strategic workforce planning fails to detect in time.
+
+## 🎯 What Eagle Vision Does
+
+Eagle Vision is an enterprise intelligence platform purpose-built to solve the internal talent discovery crisis. It analyzes the full spectrum of workforce capabilities — including hidden and transferable skills — to automatically match employees with internal roles, cross-functional gigs, and mentorship opportunities. The system detects institutional skill gaps at an organizational level and dynamically generates personalized career upskilling roadmaps for every employee.
+
+## 🔬 How It Works
+
+The platform combines multiple AI and graph-based techniques into a unified talent intelligence pipeline:
+
+- **Semantic Skill Embeddings**: Every employee profile and opportunity specification is encoded into a 768-dimensional vector using Google's `text-embedding-004` model, enabling nuanced similarity comparisons far beyond keyword matching.
+- **Knowledge Graph Traversal**: A NetworkX-powered skills ontology models relationships between competencies (e.g., *Java Concurrency* → *Go Goroutines*), surfacing transferable skills that traditional systems miss entirely.
+- **Hybrid Multi-Factor Matching**: A composite scoring algorithm combines direct skill fit (50% weight), semantic vector similarity (35% weight), and transferable skill bonuses (15% weight) to produce calibrated match scores.
+- **LLM-Powered Explainability**: Gemini 2.5 Flash generates transparent, natural-language explanations for every match recommendation — so employees and managers understand *why* a match was made, not just the score.
+- **Automated Resume Analysis**: A dedicated AI agent parses, extracts, and evaluates résumés against role requirements using structured prompts and GitHub portfolio enrichment.
+- **Executive Skill Gap Intelligence**: Organizational capability deficits are aggregated to guide workforce planning, strategic succession benching, and targeted L&D investment.
+
+## 📈 The Impact
+
+- **Reduced external hiring costs** by surfacing qualified internal candidates who would otherwise be overlooked.
+- **Decreased employee attrition** by proactively connecting employees with career growth opportunities aligned to their latent skills and aspirations.
+- **Accelerated internal mobility** with AI-generated match explanations that give managers confidence to approve non-obvious cross-functional moves.
+- **Strategic workforce planning** powered by real-time organizational skill gap dashboards, replacing guesswork with data-driven decisions.
+- **Personalized upskilling at scale** through AI-generated learning roadmaps that close individual skill gaps with step-by-step milestones.
 
 ---
 
 ## ✨ Key Features
 
-- 🧠 **Transferable Skills Detection**: Discovers latent and cross-domain competencies using semantic embeddings (`text-embedding-004`) and NetworkX knowledge graphs.
-- 🎯 **Multi-Factor Semantic Matching**: Matches candidates to open roles, gigs, and mentorship opportunities via a composite algorithm combining direct skill fit (50%), semantic similarity (35%), and transferable skill bonuses (15%).
-- 💬 **Transparent LLM Explainability**: Automatically generates natural language explanations for match fit and recommendation rationale using **Gemini 2.5 Flash**.
-- 🗺️ **Personalized Upskilling Roadmaps**: Maps step-by-step milestones to help employees close identified skill gaps for their target career aspirations.
-- 📊 **Executive Skill Gap Intelligence**: Aggregates organizational capability deficits to guide workforce planning and strategic succession benches.
-- 🛡️ **Enterprise Security & Privacy**: Role-Based Access Control (RBAC), confidential internal mobility preferences, and JWT authentication.
+- 🧠 **Transferable Skills Detection** — Discovers latent and cross-domain competencies using semantic embeddings (`text-embedding-004`) and NetworkX knowledge graphs.
+- 🎯 **Multi-Factor Semantic Matching** — Matches candidates to open roles, gigs, and mentorship opportunities via a composite algorithm combining direct skill fit, semantic similarity, and transferable skill bonuses.
+- 💬 **Transparent LLM Explainability** — Automatically generates natural language explanations for match fit and recommendation rationale using **Gemini 2.5 Flash**.
+- 📄 **AI Resume Analysis Agent** — Parses résumés, extracts structured skill data, enriches profiles with GitHub portfolio analysis, and evaluates candidates against role requirements.
+- 🗺️ **Personalized Upskilling Roadmaps** — Maps step-by-step milestones to help employees close identified skill gaps for their target career aspirations.
+- 📊 **Executive Skill Gap Intelligence** — Aggregates organizational capability deficits to guide workforce planning and strategic succession benches.
+- 👥 **Team & HR Management** — Team leaders can manage team composition, and HR can oversee workforce-wide talent operations.
+- 🔔 **Notifications & Requests** — In-app notification system for opportunity updates, match alerts, and internal mobility requests.
+- 🛡️ **Enterprise Security & Privacy** — Role-Based Access Control (RBAC), confidential internal mobility preferences, and JWT authentication.
 
 ---
 
@@ -49,6 +61,7 @@ Eagle Vision is an enterprise intelligence system that analyzes workforce capabi
 | **Vector Search** | `pgvector` with HNSW cosine indexes | Sub-millisecond similarity search over 768-dim embeddings |
 | **Cache & Bus** | Redis 7 | Token blacklisting, session state & rate limiting |
 | **AI Engine** | Google GenAI SDK (`google-genai`) | Embeddings (`text-embedding-004`) & LLM reasoning (`gemini-2.5-flash`) |
+| **Resume Agent** | Google GenAI · PyPDF2 · python-docx | Structured résumé parsing, extraction, and evaluation |
 | **Graph Logic** | NetworkX · NumPy · Scipy · Scikit-Learn | Skills taxonomy graph traversal and similarity calculations |
 | **DevOps & Containers** | Docker · Docker Compose · Kubernetes | Containerized development and scalable orchestration |
 | **CI/CD** | GitHub Actions | Automated linting, test suites, and frontend build verification |
@@ -145,7 +158,8 @@ docker compose down
 ```
 Eagle-Vision-/
 ├── .github/
-│   ├── workflows/ci.yml           # Automated CI workflow
+│   ├── workflows/
+│   │   └── ci.yml                 # Automated CI workflow (lint, test, build)
 │   └── pull_request_template.md   # Standardized PR checklist
 ├── ai/                            # Specialized AI & graph modules
 │   ├── common/                    # Gemini SDK clients & wrappers
@@ -153,34 +167,66 @@ Eagle-Vision-/
 │   ├── matching_engine/           # Hybrid semantic talent matcher
 │   ├── market_trends/             # Market demand & skill trend analyzer
 │   ├── skills_graph/              # NetworkX skills ontology & transferability
-│   └── requirements.txt
+│   └── requirements.txt           # AI module Python dependencies
 ├── backend/                       # FastAPI asynchronous application
 │   ├── alembic/                   # Database migration scripts
-│   ├── alembic.ini
+│   ├── alembic.ini                # Alembic migration configuration
 │   ├── app/
-│   │   ├── api/v1/                # Modular API route controllers
-│   │   │   ├── endpoints/         # Auth, employees, skills, opportunities, etc.
-│   │   │   └── router.py          # Unified API v1 router
+│   │   ├── ai/                    # AI integration layer
+│   │   ├── api/
+│   │   │   ├── deps.py            # Shared dependency injection
+│   │   │   └── v1/
+│   │   │       ├── endpoints/     # Route controllers
+│   │   │       │   ├── ai.py              # AI match & explainability endpoints
+│   │   │       │   ├── analytics.py       # Executive dashboard analytics
+│   │   │       │   ├── auth.py            # Authentication & JWT endpoints
+│   │   │       │   ├── employees.py       # Employee profile management
+│   │   │       │   ├── hr.py              # HR workforce operations
+│   │   │       │   ├── learning.py        # Upskilling path endpoints
+│   │   │       │   ├── notifications.py   # In-app notification system
+│   │   │       │   ├── opportunities.py   # Internal opportunity management
+│   │   │       │   ├── requests.py        # Internal mobility requests
+│   │   │       │   ├── resumes.py         # Resume upload & analysis
+│   │   │       │   ├── skills.py          # Skills taxonomy & graph queries
+│   │   │       │   ├── talent.py          # Talent search & discovery
+│   │   │       │   └── teams.py           # Team management & composition
+│   │   │       └── router.py      # Unified API v1 router
 │   │   ├── core/                  # App config, security/JWT, database engine
 │   │   ├── models/                # SQLAlchemy ORM models (pgvector enabled)
 │   │   ├── schemas/               # Pydantic validation & response contracts
 │   │   ├── services/              # Business logic & AI orchestration
 │   │   └── main.py                # FastAPI entry point & CORS configuration
-│   ├── Dockerfile
-│   └── requirements.txt
+│   ├── Dockerfile                 # Backend container image
+│   └── requirements.txt           # Backend Python dependencies
 ├── database/
 │   ├── init.sql                   # Schema DDL, extensions & HNSW indexes
 │   └── seeds/                     # Baseline taxonomy & mock data
 ├── docs/
+│   ├── ai/                        # AI & ML prompt guidelines
 │   ├── architecture/              # System, API, & Database specifications
 │   ├── diagrams/                  # Editable .drawio and .excalidraw files
-│   ├── ai/                        # AI & ML prompt guidelines
 │   ├── requirements/              # Problem statements & user stories
 │   └── security/                  # RBAC policies & data privacy docs
 ├── frontend/                      # React + TypeScript SPA
 │   ├── src/
-│   │   ├── components/layout/     # Navbar, Sidebar, Page Shells
-│   │   ├── pages/                 # Dashboard, SkillsGraph, Opportunities, Learning, Profile
+│   │   ├── components/
+│   │   │   ├── common/            # Reusable UI components
+│   │   │   ├── layout/            # Navbar, Sidebar, Page Shells
+│   │   │   └── modals/            # Dialog & modal components
+│   │   ├── context/
+│   │   │   └── AppContext.tsx     # Global app state provider
+│   │   ├── data/                  # Static data & configuration
+│   │   ├── modules/
+│   │   │   └── hr/                # HR-specific module components
+│   │   ├── pages/
+│   │   │   ├── auth/              # Login & registration pages
+│   │   │   ├── employee/          # Employee-facing views
+│   │   │   ├── team_leader/       # Team leader management views
+│   │   │   ├── Dashboard.tsx      # Main dashboard
+│   │   │   ├── LearningPage.tsx   # Upskilling & learning paths
+│   │   │   ├── OpportunitiesPage.tsx  # Browse internal opportunities
+│   │   │   ├── ProfilePage.tsx    # Employee profile view
+│   │   │   └── SkillsGraphPage.tsx    # Interactive skills visualization
 │   │   ├── services/              # Axios API client & interceptors
 │   │   ├── types/                 # TypeScript entity definitions
 │   │   ├── App.tsx                # App root & React Router navigation
@@ -189,12 +235,32 @@ Eagle-Vision-/
 │   ├── Dockerfile                 # Multi-stage production Nginx container
 │   ├── index.html
 │   ├── package.json
+│   ├── postcss.config.js
 │   ├── tailwind.config.js
 │   ├── tsconfig.json
+│   ├── tsconfig.node.json
 │   └── vite.config.ts
 ├── infra/                         # Production infrastructure manifests
 │   ├── docker/                    # Nginx reverse proxy configuration
 │   └── k8s/                       # Kubernetes deployment & service definitions
+├── resume_analysis_agent/         # Standalone AI resume evaluation agent
+│   ├── core/
+│   │   ├── config.py              # Agent configuration & API keys
+│   │   ├── evaluator.py           # Resume scoring & role-fit evaluation
+│   │   ├── extractor.py           # Structured data extraction from résumés
+│   │   ├── github_enricher.py     # GitHub portfolio analysis & enrichment
+│   │   ├── models.py              # Data models for resume analysis
+│   │   ├── parser.py              # PDF & DOCX résumé parser
+│   │   └── prompts.py             # LLM prompt templates for evaluation
+│   ├── roles/                     # Role requirement definitions
+│   ├── tests/                     # Agent-specific test suite
+│   ├── agent.py                   # Main agent orchestrator
+│   ├── api.py                     # REST API interface for the agent
+│   ├── cli.py                     # Command-line interface
+│   ├── integration_example.py     # Integration usage examples
+│   ├── pyproject.toml             # Project metadata & build config
+│   ├── requirements.txt           # Agent-specific dependencies
+│   └── README.md                  # Agent documentation
 ├── tests/                         # Automated test suite
 │   ├── conftest.py                # Pytest test fixtures
 │   ├── integration/               # API endpoint integration tests
@@ -216,14 +282,14 @@ $$\text{Match Score} = (w_1 \times S_{\text{direct}}) + (w_2 \times S_{\text{sem
 1. **Direct Skill Match ($w_1 = 0.50$)**: Weighted evaluation of mandatory and optional required skills compared against candidate proficiency levels (1–5 scale).
 2. **Semantic Similarity ($w_2 = 0.35$)**: Cosine similarity between candidate profile embedding and opportunity specification embedding via `pgvector` HNSW indexes:
    $$\text{Sim}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
-3. **Transferable Skills ($w_3 = 0.15$)**: NetworkX graph distance traversal identifying adjacent capabilities (e.g., *Java Concurrency* $\to$ *Go Goroutines*).
+3. **Transferable Skills ($w_3 = 0.15$)**: NetworkX graph distance traversal identifying adjacent capabilities (e.g., *Java Concurrency* → *Go Goroutines*).
 
 ---
 
 ### Data Flow & Request Lifecycle
 
 ```
-[Employee / Manager]
+[Employee / Manager / HR]
         │
         ▼
 [React 18 SPA (Vite)] ── Axios Bearer Token ──► [Nginx / FastAPI Gateway (:8000)]
@@ -235,6 +301,7 @@ $$\text{Match Score} = (w_1 \times S_{\text{direct}}) + (w_2 \times S_{\text{sem
              • Users & Profiles                                                • Profile Embeddings
              • Skills Taxonomy                                                 • Match Explainability
              • Opportunity Specs                                               • Upskilling Curricula
+             • Teams & HR Records                                              • Resume Analysis Agent
 ```
 
 ---
@@ -244,6 +311,8 @@ $$\text{Match Score} = (w_1 \times S_{\text{direct}}) + (w_2 \times S_{\text{sem
 FastAPI automatically generates interactive OpenAPI documentation:
 - **Swagger UI**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 - **ReDoc**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+For full project documentation including problem statements, user stories, architecture decisions, and design specifications, refer to the **[💡 EAGLE VISION — Project Documentation (Notion)](https://app.notion.com/p/EAGLE-VISION-3df6114dea7580a1ade9cf7b411904de?source=copy_link)**.
 
 ### Core Endpoint Summary
 
@@ -259,6 +328,13 @@ FastAPI automatically generates interactive OpenAPI documentation:
 | **Opportunities** | `POST` | `/api/v1/opportunities` | Publish new internal opportunity |
 | **AI Engine** | `POST` | `/api/v1/ai/match` | Compute semantic match scores |
 | **AI Engine** | `POST` | `/api/v1/ai/explain-match` | Generate plain-English match rationale |
+| **Resumes** | `POST` | `/api/v1/resumes/upload` | Upload & analyze résumé documents |
+| **Resumes** | `GET` | `/api/v1/resumes/{id}` | Retrieve parsed résumé analysis results |
+| **HR** | `GET` | `/api/v1/hr/dashboard` | HR workforce analytics & operations |
+| **Teams** | `GET` | `/api/v1/teams` | Team composition & management |
+| **Talent** | `GET` | `/api/v1/talent/search` | Cross-organizational talent discovery |
+| **Notifications** | `GET` | `/api/v1/notifications` | In-app notification feed |
+| **Requests** | `POST` | `/api/v1/requests` | Submit internal mobility requests |
 | **Learning** | `GET` | `/api/v1/learning/paths/{id}` | Retrieve personalized upskilling milestones |
 | **Analytics** | `GET` | `/api/v1/analytics/overview` | Executive talent mobility indicators |
 
@@ -309,6 +385,12 @@ pytest ../tests/unit/test_matcher.py -v
 pytest ../tests/integration/test_api.py -v
 ```
 
+### Run Resume Agent Tests
+```bash
+cd resume_analysis_agent
+pytest tests/ -v
+```
+
 ### Test Frontend Build
 ```bash
 cd frontend
@@ -333,48 +415,15 @@ docker build -t eagle-vision-frontend:latest ./frontend
 
 ### Kubernetes Deployment
 
-Pre-configured Kubernetes manifests are located in [`infra/k8s/`](file:///d:/Eagle-Vision-/infra/k8s):
+Pre-configured Kubernetes manifests are located in `infra/k8s/`:
 
 ```bash
 kubectl apply -f infra/k8s/deployment.yaml
 ```
 
----
 
-## 🔧 Troubleshooting
 
-### 1. Database Connection Refused
-- **Issue**: `asyncpg.exceptions.CannotConnectNowError: connection refused`
-- **Fix**: Verify PostgreSQL is running on port 5432:
-  ```bash
-  docker ps
-  # Or start the database container
-  docker compose up -d db
-  ```
-
-### 2. Missing `pgvector` Extension
-- **Issue**: `type "vector" does not exist`
-- **Fix**: Ensure you are using the official pgvector image (`pgvector/pgvector:pg16`), or execute:
-  ```sql
-  CREATE EXTENSION IF NOT EXISTS vector;
-  ```
-
-### 3. Frontend Port Conflict
-- **Issue**: `Port 3000 is already in use`
-- **Fix**: Launch Vite on an alternative port:
-  ```bash
-  npm run dev -- --port 3001
-  ```
-
-### 4. Gemini API Key Not Configured
-- **Issue**: AI embeddings return mock zero-vectors.
-- **Fix**: Provide your Gemini API key in `.env`:
-  ```bash
-  GEMINI_API_KEY=your_actual_gemini_api_key
-  ```
-
----
 
 ## 📄 License & Contributing
 
-Distributed under the **MIT License**. Contributions, bug reports, and feature requests are welcome via Pull Requests following the checklist in [`.github/pull_request_template.md`](file:///d:/Eagle-Vision-/.github/pull_request_template.md).
+Distributed under the **MIT License**. Contributions, bug reports, and feature requests are welcome via Pull Requests following the checklist in `.github/pull_request_template.md`.
