@@ -3,6 +3,17 @@ Eagle Vision — Test Suite Fixtures & Configuration
 """
 
 import pytest
+import pytest_asyncio
+
+
+@pytest_asyncio.fixture(autouse=True, scope="function")
+async def setup_test_db():
+    from app.core.database import create_tables
+    from app.main import seed_database
+    import app.models  # Ensure all models are registered on Base.metadata
+
+    await create_tables()
+    await seed_database()
 
 
 @pytest.fixture
